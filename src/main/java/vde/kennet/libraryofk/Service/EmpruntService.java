@@ -18,15 +18,11 @@ public class EmpruntService {
     @Autowired private EmpruntRepository eRepo;
 
     public Iterable<Livre> getBooksEmpruntes (final Integer idLecteur) {
-
         return lService.getLecteur(idLecteur).get().getEmprunts().stream()
-                .map(Emprunt::getLivre)
-                //on est passé de Emprunt à Livre
+                .map(Emprunt::getLivre)   //on est passé de Emprunt à Livre
                 .filter(livre -> livre.getEtat()!=EtatLivre.DISPONIBLE)
                 .toList()
                 ;
-
-
     }
 
     public boolean emprunterLivre (Lecteur lecteur, Livre livre, LocalDate retourAttendu) {
@@ -62,19 +58,12 @@ public class EmpruntService {
         Lecteur lecteur = lService.getLecteur(id).get();
         Livre livre = bService.getLivre(ISBN);
         List<Emprunt> emprunts = livre.getEmprunts().stream()
-                        .filter(emprunt -> emprunt.getLivre().getEtat()!=EtatLivre.DISPONIBLE)
-                                .toList();
+                        .filter(emprunt -> emprunt.getLivre().getEtat()!=EtatLivre.DISPONIBLE) .toList();
 
-        System.out.println("emprunts de " + lecteur.getPrenomLecteur()
-                                        + " : " + lecteur.getEmprunts().stream()
-                .filter(emprunt -> emprunt.getLivre().getEtat()!=EtatLivre.DISPONIBLE)
-                .toList()
-                .size());
+        System.out.println("emprunts de " + lecteur.getPrenomLecteur() + " : " + lecteur.getEmprunts().stream()
+                .filter(emprunt -> emprunt.getLivre().getEtat()!=EtatLivre.DISPONIBLE).toList() .size());
         Emprunt e = emprunts.get(emprunts.size()-1);
-        System.out.println("emprunteur : " + e.getLecteur().getPrenomLecteur()
-                            + " Lecteur : " + lecteur.getPrenomLecteur());
-        System.out.println("taille emprunts : " + emprunts.size());
-        //return emprunts.get(emprunts.size()-1);
+        System.out.println("taille emprunts : " + emprunts.size()); //return emprunts.get(emprunts.size()-1);
         return e;
     }
 
@@ -90,7 +79,6 @@ public class EmpruntService {
     //@Scheduled(cron = "0 30 8 * * *")
     @Scheduled(cron = "5 * * * * *")
     public void retardRetourEmprunt () {
-
         List<Emprunt> emprunts = (List<Emprunt>) eRepo.findAll();
         //Liste d'emprunts, j'ai créé une requete avec la classe en classe, et j'ai demandé le result en list
         System.out.println("Emprunts : " + emprunts.size());
@@ -104,12 +92,8 @@ public class EmpruntService {
 
        List<Livre> livresEnRetard = retards.stream().map(Emprunt::getLivre).toList();
         System.out.println("Livres en retard : " + livresEnRetard.size());
-
         livresEnRetard.stream().forEach(livre -> livre.setEtat(EtatLivre.EN_RETARD));
                 //on les change tous en EN_RETARD
-
         livresEnRetard.stream().forEach(livre -> bService.saveLivre(livre));
     }
-
-
 }
