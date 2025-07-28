@@ -11,7 +11,7 @@ import vde.kennet.libraryofk.Service.EmpruntService;
 import vde.kennet.libraryofk.Service.LecteurService;
 
 import java.time.LocalDate;
-
+// du texte pour tester le git
 @RestController
 public class RESTEmpruntController {
     @Autowired EmpruntService service;
