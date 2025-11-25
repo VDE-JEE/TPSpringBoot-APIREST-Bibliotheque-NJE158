@@ -1,0 +1,26 @@
+services:
+
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Kennet2024!
+    ports:
+      - 3306:3306
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 9080:8080
+  smtp4dev:
+    container_name: smtp4dev
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      # Change the number before : to the port the web interface should be accessible on
+      - 9081:80
+      # Change the number before : to the port the SMTP server should be accessible on
+      - 9025:25
+      # Change the number before : to the port the IMAP server should be accessible on
+      - '143:143'
